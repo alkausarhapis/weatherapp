@@ -4,7 +4,7 @@ function getWeather() {
   const msg = document.getElementById("msg");
 
   if (!city) {
-    msg.innerHTML = "Please enter a city!";
+    alert("Please enter a city!");
   }
 
   const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
@@ -15,21 +15,21 @@ function getWeather() {
     .then((response) => response.json())
     .then((data) => {
       displayWeather(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching current weather data:", error);
-      alert("Error fetching weather data, please try again.");
     });
+  // .catch((error) => {
+  //   console.error("Error fetching current weather data:", error);
+  //   alert("Error fetching weather data, please try again.");
+  // });
 
   fetch(forecastUrl)
     .then((response) => response.json())
     .then((data) => {
       displayHourlyWeather(data.list);
-    })
-    .catch((error) => {
-      console.error("Error fetching current weather data:", error);
-      alert("Error fetching weather data, please try again.");
     });
+  // .catch((error) => {
+  //   console.error("Error fetching current weather data:", error);
+  //   alert("Error fetching weather data, please try again.");
+  // });
 }
 
 function displayWeather(data) {
