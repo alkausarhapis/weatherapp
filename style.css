@@ -12,25 +12,24 @@ p {
 }
 
 input {
-  width: calc(100%-10px);
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 45px;
+  flex: 1; /* Make input take available space */
+  padding: 12px;
+  border-radius: 10px 0 0 10px;
+  border: 1px solid #ccc;
 }
 
 button {
   background-color: #2b2b2a;
   color: white;
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
   border: none;
-  margin-top: 10px;
   font-size: 15px;
   cursor: pointer;
 }
 
 button:hover {
-  opacity: 0.3;
+  opacity: 0.7;
 }
 
 small {
@@ -56,6 +55,32 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
   border-radius: 10px;
+  position: relative; /* Ensure the suggestions are positioned correctly */
+}
+
+#inputContainer {
+  display: flex;
+  margin-top: 45px;
+}
+
+#suggestion {
+  position: absolute;
+  list-style: none;
+  width: calc(
+    100% - 40px
+  ); /* Match the width of the inputContainer minus padding */
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.4);
+  text-align: left;
+  z-index: 1000; /* Ensure it appears above other elements */
+  background-color: white; /* Ensure the background is white */
+  margin-top: 5px; /* Add some space between input and suggestions */
+}
+
+#suggestion li {
+  background-color: white;
+  padding: 3px;
+  cursor: pointer;
+  color: #2b2b2a;
 }
 
 #temperature p {
@@ -97,4 +122,9 @@ body {
   width: 30px;
   height: 30px;
   margin-bottom: 5px;
+}
+
+#footer {
+  bottom: 0;
+  text-align: center;
 }

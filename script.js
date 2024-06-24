@@ -1,14 +1,70 @@
+// suggestion
+const apiKey = "1e06cdfae579a95a8126c2604416f1ae";
+const searchBar = document.getElementById("city");
+const suggest = document.getElementById("suggestion");
+let cities = [];
+
+searchBar.addEventListener("keyup", (event) => {
+  const qry = searchBar.value.toLowerCase();
+
+  if (qry.length < 1) {
+    suggest.innerHTML = "";
+    return;
+  }
+
+  fetchCities(qry).then((filteredCity) => {
+    suggest.innerHTML = "";
+    const length = filteredCity.length > 3 ? 3 : filteredCity.length;
+
+    for (let i = 0; i < length; i++) {
+      const li = document.createElement("li");
+      li.textContent = filteredCity[i];
+      suggest.appendChild(li);
+    }
+  });
+});
+
+suggest.addEventListener("click", (event) => {
+  if (event.target.tagName === "LI") {
+    searchBar.value = event.target.textContent;
+    suggest.innerHTML = "";
+  }
+});
+
+async function fetchCities(query) {
+  const response = await fetch(
+    `http://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${apiKey}`
+  );
+  const data = await response.json();
+
+  return data.map((city) => {
+    let cityName = city.name;
+
+    // Remove unwanted parts from the city name
+    if (cityName.includes("Special Capital Region of")) {
+      cityName = cityName.replace("Special Capital Region of", "").trim();
+    }
+
+    return `${cityName}, ${city.country}`;
+  });
+}
+
 function getWeather() {
-  const apiKey = "1e06cdfae579a95a8126c2604416f1ae";
-  const city = document.getElementById("city").value;
-  const msg = document.getElementById("msg");
+  const city = searchBar.value.trim();
 
   if (!city) {
     alert("Please enter a city!");
+    return;
   }
 
-  const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+  const [cityName, countryCode] = city.split(",").map((item) => item.trim());
+  if (!cityName || !countryCode) {
+    alert("Please enter a valid format: city, country code.");
+    return;
+  }
+
+  const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},${countryCode}&appid=${apiKey}`;
+  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName},${countryCode}&appid=${apiKey}`;
 
   // fetch data from api
   fetch(currentWeatherUrl)
